@@ -1,0 +1,102 @@
+{% extends 'hotel/base.html' %}
+{% load form_tags %}
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Card for Edit Service Form -->
+            <div class="card shadow">
+                <div class="card-header bg-warning text-white text-center">
+                    <h2 class="mb-0">Edit Service</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Display the name of the service being edited -->
+                    <h4 class="text-center text-muted mb-4">Editing: <strong>{{ service.name }}</strong></h4>
+
+                    <!-- Service Edit Form -->
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+
+                        <!-- Service Name Field -->
+                        <div class="form-group">
+                            <label for="{{ form.name.id_for_label }}" class="font-weight-bold">Service Name</label>
+                            {{ form.name|add_class:"form-control" }}
+                        </div>
+
+                        <!-- Service Price Field -->
+                        <div class="form-group">
+                            <label for="{{ form.price.id_for_label }}" class="font-weight-bold">Service Price</label>
+                            {{ form.price|add_class:"form-control" }}
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Back to Service List Button -->
+            <div class="text-center mt-4">
+                <a href="{% url 'admin_service_list' %}" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-arrow-left"></i> Back to Service List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include FontAwesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<!-- Add some custom styling to beautify the form -->
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .card-header {
+        border-radius: 10px 10px 0 0;
+        font-weight: 600;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border: none;
+        border-radius: 5px;
+        padding: 12px 30px;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+        border-radius: 5px;
+        padding: 12px 30px;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    .text-muted {
+        color: #6c757d !important;
+    }
+</style>
+{% endblock %}

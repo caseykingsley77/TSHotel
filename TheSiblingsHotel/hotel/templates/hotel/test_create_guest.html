@@ -1,0 +1,25 @@
+{% debug %}
+<select id="existingGuestSelect" class="form-control mb-3">
+    <option value="">-- Select Returning Guest --</option>
+    {% for guest in guests %}
+    <option value="{{ guest.id }}" data-details='{
+        "title": "{{ guest.title }}",
+        "first_name": "{{ guest.first_name }}",
+        "middle_name": "{{ guest.middle_name }}",
+        "last_name": "{{ guest.last_name }}",
+        "email": "{{ guest.email }}",
+        "phone_number": "{{ guest.phone_number }}",
+        "home_address": "{{ guest.home_address }}",
+        "occupation": "{{ guest.occupation }}",
+        "valid_id": "{{ guest.valid_id }}",
+        "passport_number": "{{ guest.passport_number }}",
+        "next_of_kin_phone_number": "{{ guest.next_of_kin_phone_number }}",
+        "car_plate_number": "{{ guest.car_plate_number }}"
+    }'>
+        {{ guest.first_name }} {{ guest.last_name }} - {{ guest.email }}
+    </option>
+    {% endfor %}
+</select>
+{% for guest in guests %}
+    <p>{{ guest.first_name }} {{ guest.last_name }} - {{ guest.email }}</p>
+{% endfor %}

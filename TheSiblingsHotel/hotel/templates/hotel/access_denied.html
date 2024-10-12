@@ -1,0 +1,15 @@
+<!-- hotel/access_denied.html -->
+{% extends 'hotel/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="text-center">
+        <h1 class="display-4 text-danger">Access Denied</h1>
+        <p class="lead">You do not have permission to view this page.</p>
+        <p>If you believe this is a mistake, please contact the administrator.</p>
+        <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-sign-in-alt"></i> Login as Admin
+        </a>
+    </div>
+</div>
+{% endblock %}

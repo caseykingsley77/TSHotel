@@ -1,0 +1,46 @@
+{% extends 'hotel/base.html' %}
+{% block content %}
+<div class="container my-5">
+    <h1 class="text-center">All Rooms</h1>
+    <p class="lead text-center">Manage all rooms below. You can edit or delete each entry.</p>
+    <hr class="mb-4">
+
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Room Number</th>
+                    <th>Room Type</th>
+                    <th>Is Occupied</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for room in rooms %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ room.room_number }}</td>
+                    <td>{{ room.room_type.name }}</td>
+                    <td>{{ room.is_occupied|yesno:"Yes,No" }}</td>
+                    <td>
+                        <a href="{% url 'edit_room' room.id %}" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a href="{% url 'delete_room' room.id %}" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Admin Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

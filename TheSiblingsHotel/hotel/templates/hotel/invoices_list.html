@@ -1,0 +1,103 @@
+{% extends 'hotel/base.html' %}
+{% load currency_filters %}
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Hotel Invoices Management</h1>
+
+    <!-- Occupied Room Invoices Section -->
+    <div class="card mb-5">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h4 mb-0">Occupied Room Invoices</h2>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Guest Name</th>
+                        <th>Room Number</th>
+                        <th>Check-in Date</th>
+                        <th>Invoice Date</th>
+                        <th>Total Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for invoice in occupied_invoices %}
+                    <tr>
+                        <td>{{ invoice.booking.guest.first_name }} {{ invoice.booking.guest.last_name }}</td>
+                        <td>{{ invoice.booking.room.room_number }}</td>
+                        <td>{{ invoice.booking.check_in|date:"M d, Y h:i A" }}</td>
+                        <td>
+                            {% if invoice.invoice_date %}
+                                {{ invoice.invoice_date|date:"M d, Y h:i A" }}
+                            {% else %}
+                                <span class="text-muted">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ invoice.total_amount|currency_naira }}</td>
+                        <td>
+                            <a href="{% url 'view_invoice' invoice.id %}" class="btn btn-outline-primary btn-sm">View Invoice</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">No occupied room invoices available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Checked Out Room Invoices Section -->
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h2 class="h4 mb-0">Checked Out Room Invoices</h2>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Guest Name</th>
+                        <th>Room Number</th>
+                        <th>Check-in Date</th>
+                        <th>Invoice Date</th>
+                        <th>Total Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% regroup unoccupied_invoices by booking.check_out.date as date_groups %}
+                    {% for group in date_groups %}
+                    <tr class="table-info">
+                        <td colspan="6" class="font-weight-bold">Check-Out Date: {{ group.grouper|date:"F d, Y" }}</td>
+                    </tr>
+                    {% for invoice in group.list %}
+                    <tr>
+                        <td>{{ invoice.booking.guest.first_name }} {{ invoice.booking.guest.last_name }}</td>
+                        <td>{{ invoice.booking.room.room_number }}</td>
+                        <td>{{ invoice.booking.check_in|date:"M d, Y h:i A" }}</td>
+                        <td>
+                            {% if invoice.invoice_date %}
+                                {{ invoice.invoice_date|date:"M d, Y h:i A" }}
+                            {% else %}
+                                <span class="text-muted">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ invoice.total_amount|currency_naira }}</td>
+                        <td>
+                            <a href="{% url 'view_invoice' invoice.id %}" class="btn btn-outline-secondary btn-sm">View Invoice</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">No checked-out room invoices available.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'hotel/base.html' %}
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <h1 class="display-4">All Guests and Bookings</h1>
+        <p class="lead">View all guests sorted by their check-in dates. Use the filter options below to narrow down results.</p>
+    </div>
+
+    <!-- Filter Form -->
+    <div class="card mb-5 shadow">
+        <div class="card-body">
+            <form method="GET" class="form-inline justify-content-center">
+                <div class="form-group mr-3">
+                    <label for="nameFilter" class="mr-2">Filter by Name:</label>
+                    <input type="text" id="nameFilter" name="name" value="{{ request.GET.name }}" class="form-control" placeholder="Enter guest name">
+                </div>
+                <div class="form-group mr-3">
+                    <label for="dateFilter" class="mr-2">Filter by Date:</label>
+                    <input type="date" id="dateFilter" name="date" value="{{ request.GET.date }}" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Filter
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Display each date with a separate table -->
+    {% for date, bookings in grouped_bookings.items %}
+    <div class="mb-5">
+        <h2 class="text-primary">{{ date|date:"F d, Y" }}</h2>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Guest Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col">Occupation</th>
+                        <th scope="col">Room</th>
+                        <th scope="col">Check-In</th>
+                        <th scope="col">Check-Out</th>
+                        <th scope="col">Car Plate Number</th>
+                        <th scope="col">Valid ID</th>
+                        <th scope="col">Next of Kin Phone</th>
+                        <th scope="col">Passport Number</th>
+                        <th scope="col">Invoice</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ booking.guest.title }} {{ booking.guest.first_name }} {{ booking.guest.middle_name }} {{ booking.guest.last_name }}</td>
+                        <td>{{ booking.guest.email }}</td>
+                        <td>{{ booking.guest.phone_number }}</td>
+                        <td>{{ booking.guest.occupation }}</td>
+                        <td>{{ booking.room.room_number }} - {{ booking.room.room_type.name }}</td>
+                        <td>{{ booking.check_in|date:"M d, Y, h:i A" }}</td>
+                        <td>{{ booking.check_out|date:"M d, Y, h:i A" }}</td>
+                        <td>{{ booking.guest.car_plate_number }}</td>
+                        <td>{{ booking.guest.valid_id|yesno:"Yes,No" }}</td>
+                        <td>{{ booking.guest.next_of_kin_phone_number }}</td>
+                        <td>{{ booking.guest.passport_number }}</td>
+                        <td>
+                            <!-- Invoice Button -->
+                            {% if booking.invoice %}
+                            <a href="{% url 'view_invoice' booking.invoice.id %}" class="btn btn-info btn-sm">
+                                <i class="fas fa-file-invoice"></i> View Invoice
+                            </a>
+                            {% else %}
+                            <span class="text-muted">No Invoice</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-center">No guests found in the database.</p>
+    {% endfor %}
+</div>
+
+<!-- Include FontAwesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %}

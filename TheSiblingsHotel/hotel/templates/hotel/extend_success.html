@@ -1,0 +1,7 @@
+{% extends 'hotel/base.html' %}
+{% block content %}
+<h1>Stay Extended</h1>
+
+<p>{{ guest.first_name }} {{ guest.last_name }}'s stay has been extended.</p>
+<p>New Check-Out Date: {{ invoice.booking.check_out }}</p>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends 'hotel/base.html' %}
+{% load currency_filters %}
+{% block content %}
+<div class="container mt-5">
+    <div class="jumbotron text-center bg-primary text-white">
+        <h1 class="display-10">Welcome to The Siblings Hotel Management System</h1>
+        <p class="lead">Manage guests, rooms, and bookings with ease.</p>
+        <hr class="my-4">
+    </div>
+
+    <div class="row mt-4">
+        <!-- Navigation Section -->
+        <div class="col-md-4">
+            <div class="card shadow-lg">
+                <div class="card-header bg-info text-white text-center">
+                    <h3 class="h5 mb-0">Navigation</h3>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'create_guest' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user-plus mr-2"></i> Create Booking
+                    </a>
+                    {% if user.is_superuser %}
+                    <a href="{% url 'admin_dashboard' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-cogs mr-2"></i> Admin  Dashboard
+                    </a>
+                    <a href="{% url 'all_guests_and_bookings' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-book mr-2"></i> Guest list
+                    </a>
+                    <a href="{% url 'create_service' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-concierge-bell mr-2"></i> Create Service
+                    </a>
+                    <a href="{% url 'create_room' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-bed mr-2"></i> Create Room
+                    </a>
+                    <a href="{% url 'create_room_type' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-layer-group mr-2"></i> Create Room Type
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'guests_checking_out' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-door-open mr-2"></i> Guests Checking Out
+                    </a>
+                    <a href="{% url 'invoices_list' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-file-invoice-dollar mr-2"></i> View Invoices
+                    </a>
+                    <a href="{% url 'daily_report' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-alt mr-2"></i> Report
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vacant Rooms Section -->
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-success text-white text-center">
+                    <h3 class="h5 mb-0">Vacant Rooms</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Room Number</th>
+                                <th>Room Type</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for room in vacant_rooms %}
+                            <tr>
+                                <td>{{ room.room_number }}</td>
+                                <td>{{ room.room_type.name }}</td>
+                                <td>{{ room.room_type.price_per_night|currency_naira }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-danger">No vacant rooms available.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-3 mb-4">
+        <a href="{% url 'admin_service_list' %}" class="btn btn-primary btn-block">
+            <i class="fas fa-cogs"></i> Manage Services
+        </a>
+    </div>
+    <div class="col-md-3 mb-4">
+        <a href="{% url 'admin_room_list' %}" class="btn btn-success btn-block">
+            <i class="fas fa-door-closed"></i> Manage Rooms
+        </a>
+    </div>
+    <div class="col-md-3 mb-4">
+        <a href="{% url 'admin_room_type_list' %}" class="btn btn-warning btn-block">
+            <i class="fas fa-hotel"></i> Manage Room Types
+        </a>
+    </div>
+    <div class="col-md-3 mb-4">
+        <a href="{% url 'admin_guest_list' %}" class="btn btn-info btn-block">
+            <i class="fas fa-users"></i> Manage Guests
+        </a>
+    </div>
+</div>
+
+
+<!-- Add FontAwesome and some CSS for styling icons and buttons -->
+<style>
+    .list-group-item-action:hover {
+        background-color: #f1f1f1;
+        transition: 0.3s;
+    }
+    .fas {
+        color: #491d1d;
+    }
+</style>
+{% endblock %}

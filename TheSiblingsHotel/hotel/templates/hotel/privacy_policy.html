@@ -1,0 +1,126 @@
+{% extends 'hotel/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="text-center mb-4" data-aos="fade-down">Privacy Policy</h1>
+
+    <p data-aos="fade-right">
+        At K.O.S Tech HUB, we prioritize the privacy and security of your personal information. This Privacy Policy explains how we collect, use, and safeguard the information provided through our Hotel Management Software. By using our services, you agree to the terms outlined in this policy.
+    </p>
+
+    <h3 data-aos="fade-up">1. Information We Collect</h3>
+    <p data-aos="fade-left">We collect the following types of information from our users:</p>
+    <ul data-aos="fade-right">
+        <li><strong>Personal Information:</strong> When guests or employees use our system, we may collect personal data such as names, addresses, phone numbers, email addresses, identification documents, and payment details.</li>
+        <li><strong>Usage Information:</strong> Our system logs usage data, including IP addresses, browser types, and access times to ensure system integrity and to enhance user experience.</li>
+        <li><strong>Cookies:</strong> We use cookies to improve functionality, analyze site usage, and personalize your experience.</li>
+    </ul>
+
+    <h3 data-aos="fade-up">2. How We Use Your Information</h3>
+    <p data-aos="fade-left">We use the collected information for the following purposes:</p>
+    <ul data-aos="fade-right">
+        <li>To facilitate hotel booking, guest management, room assignment, and other operational services.</li>
+        <li>To manage invoicing and billing efficiently and securely.</li>
+        <li>To communicate with guests and employees regarding their bookings, services, or inquiries.</li>
+        <li>To improve and maintain the security of our system.</li>
+        <li>To comply with applicable legal requirements.</li>
+    </ul>
+
+    <h3 data-aos="fade-up">3. How We Share Your Information</h3>
+    <p data-aos="fade-left">We respect your privacy and do not share personal information with third parties except in the following cases:</p>
+    <ul data-aos="fade-right">
+        <li>With service providers and vendors who assist us in operating our software, provided they adhere to strict confidentiality obligations.</li>
+        <li>In compliance with legal obligations, including responding to court orders, legal processes, or government requests.</li>
+        <li>To protect the rights, property, or safety of K.O.S Tech HUB, our users, or the public.</li>
+    </ul>
+
+    <h3 data-aos="fade-up">4. Data Security</h3>
+    <p data-aos="fade-left">We implement robust security measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction. These measures include secure servers, data encryption, and access controls. However, no system is completely secure, and we cannot guarantee absolute security of your data.</p>
+
+    <h3 data-aos="fade-up">5. Your Rights</h3>
+    <p data-aos="fade-left">As a user of our system, you have the right to:</p>
+    <ul data-aos="fade-right">
+        <li>Access, correct, or delete your personal information stored in our system.</li>
+        <li>Request restrictions on how your personal data is processed.</li>
+        <li>Object to the processing of your data in certain circumstances.</li>
+    </ul>
+
+    <h3 data-aos="fade-up">6. Changes to This Policy</h3>
+    <p data-aos="fade-left">K.O.S Tech HUB may update this Privacy Policy from time to time. We will notify users of significant changes through our platform or via email. The revised policy will be effective immediately upon posting.</p>
+
+    <h3 data-aos="fade-up">7. Contact Us</h3>
+    <p data-aos="fade-left">If you have any questions about this Privacy Policy or how your information is handled, please contact us at:</p>
+    <p data-aos="fade-right"><strong>Email:</strong> <a href="mailto:kostechofficial@gmail.com">Kostechofficial@gmail.com</a></p>
+
+    <p class="text-center" data-aos="fade-up">&copy; <span id="current-year"></span> K.O.S Tech HUB. All Rights Reserved.</p>
+</div>
+
+<script>
+    // Automatically update the year in the footer
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+</script>
+
+<!-- Custom CSS for styling and animations -->
+<style>
+    /* AOS animations custom duration */
+    [data-aos] {
+        transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    h1, h3 {
+        color: #007bff; /* Primary theme color */
+        font-weight: bold;
+    }
+
+    ul {
+        padding-left: 1.5rem;
+    }
+
+    p, ul, li {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #555; /* Softer text color */
+    }
+
+    /* General page and layout styling */
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .card-header {
+        border-radius: 10px 10px 0 0;
+    }
+
+    a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        padding: 12px 30px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends 'hotel/base.html' %}
+{% load custom_filters %}
+{% load currency_filters %}
+{% block content %}
+<div class="container my-5" id="invoice-section">
+    <!-- Invoice Header -->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+                <div>
+                    <h1 class="display-4">THE SIBLINGS HOTEL</h1>
+                    <h4 class="text-muted">Invoice Number: <strong>{{ invoice.invoice_number }}</strong></h4>
+                </div>
+                <button class="btn btn-outline-primary btn-lg no-print" onclick="printInvoice()">Print Invoice</button>
+            </div>
+            <hr class="my-4">
+            <h5 class="text-center">
+                <strong>Guest: </strong> {{ invoice.booking.guest.first_name }} {{ invoice.booking.guest.last_name }} <br>
+                <strong>Total Cost: </strong>
+                <span class="text-success">{{ invoice.total_cost|currency_naira }}</span>
+            </h5>
+        </div>
+    </div>
+
+    <!-- Booking Information and Room Cost -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-info text-white">
+            <h2 class="h4 mb-0">Room Booking Details</h2>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Room Number</th>
+                        <th>Room Type</th>
+                        <th>Check-In Date</th>
+                        <th>Check-Out Date</th>
+                        <th>Room Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ invoice.booking.room.room_number }}</td>
+                        <td>{{ invoice.booking.room.room_type.name }}</td>
+                        <td>{{ invoice.booking.check_in|date:"M d, Y h:i A" }}</td>
+                        <td>{{ invoice.booking.check_out|date:"M d, Y" }} 12:00 PM</td>
+                        <td><strong class="text-primary">{{ invoice.booking.total_amount|currency_naira }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Service Selection Form (Visible on Page, Hidden in Print) -->
+    <div class="card shadow mb-4 no-print">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h4 mb-0">Add Services to Invoice</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" class="form-inline justify-content-center">
+                {% csrf_token %}
+                <label for="services" class="mr-2">Select Services:</label>
+                <select name="services" multiple class="form-control mr-2" style="min-width: 200px;">
+                    {% for service in services %}
+                    <option value="{{ service.id }}">{{ service.name }} - {{ service.price|currency_naira }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-success">Add Selected Services</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Services Added to Invoice -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-secondary text-white">
+            <h2 class="h4 mb-0">Services Added</h2>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped mb-0">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Service Name</th>
+                        <th scope="col" class="text-center">Quantity</th>
+                        <th scope="col" class="text-right">Price per Service</th>
+                        <th scope="col" class="text-right">Total Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for service in invoice.invoiceservice_set.all %}
+                    <tr>
+                        <td>{{ service.service.name }}</td>
+                        <td class="text-center">{{ service.quantity }}</td>
+                        <td class="text-right">{{ service.service.price|currency_naira }}</td>
+                        <td class="text-right">
+                            <strong>{{ service.service.price|currency_naira }} x {{ service.quantity }} = {{ service.service.price|multiply:service.quantity|currency_naira }}</strong>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">No services have been added to this invoice.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Invoice Total Amount -->
+    <div class="card shadow">
+        <div class="card-body text-center">
+            <h2><strong>Total Amount for Invoice:</strong></h2>
+            <h1 class="display-4 text-primary">{{ invoice.total_cost|currency_naira }}</h1>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to Print the Invoice Section -->
+<script>
+    function printInvoice() {
+        var printContents = document.getElementById('invoice-section').innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+        window.location.reload();
+    }
+</script>
+
+<!-- Print Optimization Styles -->
+<style>
+    @media print {
+        .no-print {
+            display: none !important; /* Hide elements with no-print class */
+        }
+        body, .container {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .card-body, .table {
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+        .table-bordered, .table-hover {
+            border: 1px solid black !important;
+        }
+        .display-4, h1, h2, h5 {
+            color: black !important;
+        }
+    }
+</style>
+{% endblock %}

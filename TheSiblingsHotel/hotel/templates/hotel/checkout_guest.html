@@ -1,0 +1,83 @@
+{% extends 'hotel/base.html' %}
+{% load currency_filters %}
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4">Manage Checkout for <strong>{{ guest.first_name }} {{ guest.last_name }}</strong></h1>
+        <p class="lead">Handle payment confirmation and stay extension for the guest with ease.</p>
+    </div>
+
+    <!-- Invoice Details Section -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-info text-white">
+            <h2 class="h4 mb-0">Invoice Details</h2>
+        </div>
+        <div class="card-body">
+            <p class="mb-2"><strong>Room Number:</strong> {{ invoice.booking.room.room_number }}</p>
+            <p class="mb-2"><strong>Room Type:</strong> {{ invoice.booking.room.room_type.name }}</p>
+            <p class="mb-2"><strong>Check-In Date:</strong> {{ invoice.booking.check_in|date:"M d, Y h:i A" }}</p>
+            <p class="mb-2"><strong>Check-Out Date:</strong> <span id="current-checkout">{{ invoice.booking.check_out|date:"M d, Y h:i A" }}</span></p>
+            <h4 class="text-right text-success"><strong>Total Amount: <span id="total-amount">{{ invoice.total_cost|currency_naira }}</span></strong></h4>
+        </div>
+    </div>
+
+    <!-- Checkout and Stay Extension Form -->
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h2 class="h4 mb-0">Manage Checkout Actions</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group row">
+                    <label for="new_check_out" class="col-sm-4 col-form-label"><strong>Extend Stay:</strong></label>
+                    <div class="col-sm-8">
+                        <input type="date" id="new_check_out" name="new_check_out" class="form-control mb-2" placeholder="Select new check-out date">
+                        <small class="form-text text-muted">Choose a new date if the guest wishes to extend their stay.</small>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <!-- Confirm Payment Button -->
+                    <button type="submit" name="action" value="confirm_payment" class="btn btn-success btn-lg mr-3">
+                        <i class="fas fa-check-circle"></i> Confirm Payment
+                    </button>
+
+                    <!-- Extend Stay Button -->
+                    <button type="submit" name="action" value="extend_stay" class="btn btn-warning btn-lg">
+                        <i class="fas fa-calendar-plus"></i> Extend Stay
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Include FontAwesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<!-- Dynamic Calculation Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const currentCheckOutElement = document.getElementById('current-checkout');
+        const totalAmountElement = document.getElementById('total-amount');
+        const newCheckOutInput = document.getElementById('new_check_out');
+
+        const originalCheckOut = new Date("{{ invoice.booking.check_out }}");  // Original checkout date from the backend
+        const pricePerNight = {{ invoice.booking.room.room_type.price_per_night }};  // Room price per night
+
+        newCheckOutInput.addEventListener('change', function () {
+            const newCheckOutDate = new Date(newCheckOutInput.value);
+            
+            if (newCheckOutDate > originalCheckOut) {
+                const extraDays = (newCheckOutDate - originalCheckOut) / (1000 * 60 * 60 * 24);  // Calculate extra days
+                const additionalCost = extraDays * pricePerNight;  // Calculate additional cost
+
+                // Update the displayed total amount
+                const updatedTotal = {{ invoice.total_cost }} + additionalCost;
+                totalAmountElement.textContent = `₦${updatedTotal.toLocaleString()}`;
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hotel Management System for The Siblings Hotel">
+    <title>The Siblings Hotel - Hotel Management System</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <style>
+        /* Custom styling for a more professional look */
+        body, html {
+            font-family: 'Lato', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        /* Navbar styling */
+        .navbar {
+            padding: 1rem 1rem;
+            background: linear-gradient(to right, #007bff, #6c757d);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.75rem;
+            color: #ffffff !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover, .navbar-nav .nav-item.active .nav-link {
+            color: #f8f9fa !important;
+            text-decoration: underline;
+        }
+
+        /* Footer styling */
+        footer {
+            background: #343a40;
+            color: #ffffff;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #f8f9fa;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #007bff;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 991.98px) {
+            .navbar-nav {
+                background: #343a40;
+                border-radius: 5px;
+                padding: 10px;
+            }
+            .navbar-nav .nav-link {
+                color: #ffffff !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">The Siblings Hotel</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    {%  if user.is_authenticated %}
+                    <li class="nav-item {% if request.resolver_match.url_name == 'create_guest' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'create_guest' %}"><i class="fas fa-user-plus"></i> Create Booking</a>
+                    </li>
+                    {% if user.is_superuser %}
+                    <li class="nav-item {% if request.resolver_match.url_name == 'register' %}active{% endif %}"></li>
+                        <a class="nav-link" href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Register </a>
+                    </li>
+                    <li class="nav-item {% if request.resolver_match.url_name == 'create_service' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'create_service' %}"><i class="fas fa-concierge-bell"></i> Create Service</a>
+                    </li>
+                    <li class="nav-item {% if request.resolver_match.url_name == 'create_room' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'create_room' %}"><i class="fas fa-door-open"></i> Create Room</a>
+                    </li>
+                    <li class="nav-item {% if request.resolver_match.url_name == 'create_room_type' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'create_room_type' %}"><i class="fas fa-bed"></i> Create Room Type</a>
+                    </li>
+                    {% endif %}  
+                    <li class="nav-item {% if request.resolver_match.url_name == 'guests_checking_out' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'guests_checking_out' %}"><i class="fas fa-sign-out-alt"></i> Guests Checking Out</a>
+                    </li>
+                    <li class="nav-item {% if request.resolver_match.url_name == 'invoices_list' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'invoices_list' %}"><i class="fas fa-file-invoice"></i> View Invoices</a>
+                    </li>
+                    <li class="nav-item {% if request.resolver_match.url_name == 'daily_report' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'daily_report' %}"><i class="fas fa-chart-line"></i> Report</a>
+                    </li>
+                    <li class="nav-item {% if request.resolver_match.url_name == 'create_booking' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'create_booking' %}"><i class="fas fa-calendar-plus"></i> Create Booking</a>
+                    </li>
+                    <li class="nav-item {% if request.resolver_match.url_name == 'login' %}active{% endif %}">
+                        <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-user"></i> Log In </a>
+                    </li> 
+                    <li class="nav-item"></li>
+                        <form id="logout-form" action="{% url 'logout' %}" method="POST" style="display: none;">
+                            {% csrf_token %}
+                        </form>
+                        <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="fas fa-sign-out-alt"></i> Log Out
+                        </a>
+                    </li>
+                    {% endif %}              
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="container mt-5">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="current-year"></span> KOS TECH HUB. All Rights Reserved.</p>
+            <p><a href="mailto:info@kostechofficial@gmail.com">Contact Us</a> | <a href="{% url 'privacy_policy' %}">Privacy Policy</a></p>
+        </div>
+        
+
+    </footer>
+<!-- Add AOS JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+    AOS.init();
+</script>
+    <!-- Scripts -->
+    <script>
+        // JavaScript to dynamically set the current year
+        document.getElementById("current-year").textContent = new Date().getFullYear();
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+{% extends 'hotel/base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Guests Scheduled for Checkout</h2>
+    <p>Checkout time is 12:00 PM for all guests regardless of their booking time.</p>
+
+    {% for date, bookings in guests_by_date.items %}
+    <h3>Guests Checking Out on {{ date|date:"M d, Y" }}</h3>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Guest Name</th>
+                <th>Room</th>
+                <th>Check-In Time</th>
+                <th>Check-Out Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.guest.first_name }} {{ booking.guest.last_name }}</td>
+                <td>{{ booking.room.room_number }}</td>
+                <td>{{ booking.check_in|date:"M d, Y, h:i A" }}</td>
+                <td>{{ booking.check_out|date:"M d, Y, h:i A" }}</td>
+                <td>
+                    {% if booking.actual_check_out %}
+                        <span class="text-muted">Checked Out</span>
+                    {% else %}
+                        {% if booking.invoice %}
+                            <a href="{% url 'checkout_guest' booking.guest.id booking.invoice.id %}" class="btn btn-danger">Manage Checkout</a>
+                        {% else %}
+                            <span class="text-muted">No Invoice</span>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endfor %}
+</div>
+{% endblock %}

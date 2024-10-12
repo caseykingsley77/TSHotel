@@ -1,0 +1,58 @@
+{% extends 'hotel/base.html' %}
+{% block content %}
+<div class="container my-5">
+    <h1 class="text-center">All Guests</h1>
+    <p class="lead text-center">Manage all guests below. You can edit or delete each entry.</p>
+    <hr class="mb-4">
+
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Guest Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Occupation</th>
+                    <th>Home Address</th>
+                    <th>Valid ID</th>
+                    <th>Passport Number</th>
+                    <th>Next of Kin Phone</th>
+                    <th>Car Plate Number</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for guest in guests %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ guest.title }} {{ guest.first_name }} {{ guest.middle_name }} {{ guest.last_name }}</td>
+                    <td>{{ guest.email }}</td>
+                    <td>{{ guest.phone_number }}</td>
+                    <td>{{ guest.occupation }}</td>
+                    <td>{{ guest.home_address }}</td>
+                    <td>{{ guest.valid_id|yesno:"Yes,No" }}</td>
+                    <td>{{ guest.passport_number }}</td>
+                    <td>{{ guest.next_of_kin_phone_number }}</td>
+                    <td>{{ guest.car_plate_number }}</td>
+                    <td>
+                        <a href="{% url 'edit_guest' guest.id %}" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a href="{% url 'delete_guest' guest.id %}" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Admin Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

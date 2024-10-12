@@ -1,0 +1,121 @@
+{% extends 'hotel/base.html' %}
+{% load currency_filters %}
+
+{% block content %}
+<div class="container my-4">
+    <h1 class="mb-4">Daily Report</h1>
+
+    <!-- Total Income Display (only for admins) -->
+    {% if user.is_superuser %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3 class="text-center">Total Income: <strong id="total-income" class="text-success">₦0.00</strong></h3>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Date Range Form -->
+    <form id="date-range-form" class="form-inline mb-4">
+        <label for="start-date" class="mr-2">Start Date:</label>
+        <input type="date" id="start-date" class="form-control mr-3" name="start_date">
+        <label for="end-date" class="mr-2">End Date:</label>
+        <input type="date" id="end-date" class="form-control mr-3" name="end_date">
+        <button type="button" class="btn btn-primary" onclick="fetchReportData()">Get Report</button>
+    </form>
+
+    <!-- Dynamic Daily Breakdown -->
+    <div id="daily-report-container"></div>
+</div>
+
+<script>
+    function fetchReportData() {
+        // Get the start and end dates from the form inputs
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
+
+        // Send an AJAX request to fetch the daily report data
+        fetch(`/daily-report-data/?start_date=${startDate}&end_date=${endDate}`)
+            .then(response => response.json())
+            .then(data => {
+                updateReportDisplay(data);
+            })
+            .catch(error => console.error('Error fetching report data:', error));
+    }
+
+    function updateReportDisplay(data) {
+        const totalIncomeElement = document.getElementById('total-income');
+
+        // Only update the total income if the element exists (visible to admins)
+        if (totalIncomeElement) {
+            totalIncomeElement.textContent = new Intl.NumberFormat('en-NG', {
+                style: 'currency',
+                currency: 'NGN'
+            }).format(data.total_income);
+        }
+
+        const reportContainer = document.getElementById('daily-report-container');
+        reportContainer.innerHTML = '';  // Clear existing content
+
+        data.daily_reports.forEach(report => {
+            // Create a new card for each day's report
+            const dayCard = document.createElement('div');
+            dayCard.classList.add('card', 'mb-3');
+            dayCard.innerHTML = `
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="mb-0">${report.day}</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Guest Name</th>
+                                <th>Room Number</th>
+                                <th>Check-In</th>
+                                <th>Check-Out</th>
+                                <th class="text-right">Room Cost</th>
+                                <th class="text-right">Services Cost</th>
+                                <th class="text-right">Total Amount</th>
+                                <th>Invoice</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${report.bookings.map(booking => `
+                                <tr>
+                                    <td>${booking.guest_name}</td>
+                                    <td>${booking.room_number}</td>
+                                    <td>${booking.check_in}</td>
+                                    <td>${booking.check_out}</td>
+                                    <td class="text-right">${formatCurrency(booking.room_cost)}</td>
+                                    <td class="text-right">${formatCurrency(booking.services_cost)}</td>
+                                    <td class="text-right"><strong>${formatCurrency(booking.total)}</strong></td>
+                                    <td>
+                                        ${booking.invoice_id ? `<a href="/invoice/${booking.invoice_id}/" class="btn btn-info btn-sm">View Invoice</a>` : `<span class="text-muted">No Invoice</span>`}
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="6" class="text-right"><strong>Daily Total:</strong></td>
+                                <td class="text-right"><strong>${formatCurrency(report.day_total)}</strong></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            `;
+            reportContainer.appendChild(dayCard);
+        });
+    }
+
+    function formatCurrency(value) {
+        return new Intl.NumberFormat('en-NG', {
+            style: 'currency',
+            currency: 'NGN'
+        }).format(value);
+    }
+
+    // Fetch initial report data when the page loads
+    document.addEventListener('DOMContentLoaded', fetchReportData);
+</script>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'hotel/base.html' %}
+{% load currency_filters %} <!-- Load custom currency filter to format the total cost -->
+{% block content %}
+<div class="container my-5">
+    <!-- Checkout Success Message Card -->
+    <div class="card shadow-lg border-success">
+        <div class="card-body text-center">
+            <!-- Success Icon and Header -->
+            <div class="my-3">
+                <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+                <h1 class="display-4 mt-3">Checkout Successful</h1>
+            </div>
+
+            <!-- Guest Information -->
+            <p class="lead">Guest <span class="font-weight-bold">{{ guest.first_name }} {{ guest.last_name }}</span> has successfully checked out.</p>
+
+            <!-- Invoice and Amount Details -->
+            <p class="h5">
+                <strong>Room Number:</strong> <span class="badge badge-info">{{ invoice.booking.room.room_number }}</span>
+            </p>
+            <p class="h5">
+                <strong>Total Amount Paid:</strong> 
+                <span class="text-success font-weight-bold">{{ invoice.total_cost|currency_naira }}</span>
+            </p>
+
+            <!-- Action Buttons -->
+            <div class="mt-4">
+                <a href="{% url 'invoices_list' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-file-invoice"></i> View All Invoices
+                </a>
+                <a href="{% url 'checking_out_guests' %}" class="btn btn-secondary btn-lg ml-2">
+                    <i class="fas fa-users"></i> Back to Guests
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include FontAwesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+{% endblock %}

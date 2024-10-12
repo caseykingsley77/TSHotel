@@ -1,0 +1,10 @@
+{% extends 'hotel/base.html' %}
+{% block content %}
+<div class="container my-5">
+    <div class="text-center">
+        <h1 class="display-4">Access Denied</h1>
+        <p class="lead">You do not have permission to access this page. Please contact the administrator if you believe this is a mistake.</p>
+        <a href="{% url 'home' %}" class="btn btn-primary">Return to Home</a>
+    </div>
+</div>
+{% endblock %}

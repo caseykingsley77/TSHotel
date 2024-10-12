@@ -1,0 +1,94 @@
+{% extends 'hotel/base.html' %}
+{% block content %}
+<div class="container my-5">
+    <h1 class="text-center">Admin Dashboard</h1>
+    <p class="lead text-center">Manage all hotel services, rooms, room types, and guests from this central dashboard.</p>
+    <hr class="mb-5">
+
+    <div class="row text-center">
+        <!-- Service Management Section -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4>Services</h4>
+                </div>
+                <div class="card-body">
+                    <a href="{% url 'admin_service_list' %}" class="btn btn-info btn-block mb-2">
+                        <i class="fas fa-eye"></i> View Services
+                    </a>
+                    <a href="{% url 'create_service' %}" class="btn btn-success btn-block">
+                        <i class="fas fa-plus-circle"></i> Add Service
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Room Management Section -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4>Rooms</h4>
+                </div>
+                <div class="card-body">
+                    <a href="{% url 'admin_room_list' %}" class="btn btn-info btn-block mb-2">
+                        <i class="fas fa-eye"></i> View Rooms
+                    </a>
+                    <a href="{% url 'create_room' %}" class="btn btn-success btn-block">
+                        <i class="fas fa-plus-circle"></i> Add Room
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Room Type Management Section -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-white">
+                    <h4>Room Types</h4>
+                </div>
+                <div class="card-body">
+                    <a href="{% url 'admin_room_type_list' %}" class="btn btn-info btn-block mb-2">
+                        <i class="fas fa-eye"></i> View Room Types
+                    </a>
+                    <a href="{% url 'create_room_type' %}" class="btn btn-success btn-block">
+                        <i class="fas fa-plus-circle"></i> Add Room Type
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Guest Management Section -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h4>Guests</h4>
+                </div>
+                <div class="card-body">
+                    <a href="{% url 'admin_guest_list' %}" class="btn btn-info btn-block mb-2">
+                        <i class="fas fa-eye"></i> View Guests
+                    </a>
+                    <a href="{% url 'create_guest' %}" class="btn btn-success btn-block">
+                        <i class="fas fa-plus-circle"></i> Add Guest
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include FontAwesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+    .card-header {
+        border-radius: 10px 10px 0 0;
+    }
+</style>
+{% endblock %}

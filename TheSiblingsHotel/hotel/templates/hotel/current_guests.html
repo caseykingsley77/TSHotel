@@ -1,0 +1,36 @@
+{% extends 'hotel/base.html' %}
+{% block content %}
+<div class="container my-5">
+    <h2>Currently Checked-In Guests</h2>
+    <p>Below is a list of guests who are currently checked in. Use the "Check Out" button to complete their stay.</p>
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Guest Name</th>
+                <th>Room</th>
+                <th>Check-In Time</th>
+                <th>Check-Out Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in guests %}
+            <tr>
+                <td>{{ booking.guest.first_name }} {{ booking.guest.last_name }}</td>
+                <td>{{ booking.room.room_number }}</td>
+                <td>{{ booking.check_in|date:"M d, Y, h:i A" }}</td>
+                <td>{{ booking.check_out|date:"M d, Y, h:i A" }}</td>
+                <td>
+                    <a href="{% url 'checkout_guest' booking.id %}" class="btn btn-danger">Check Out</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center text-muted py-4">No guests are currently checked in.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
