@@ -53,7 +53,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'hotel.middleware.LoginRequiredMiddleware',
-    'hotel.middleware.RestrictIPMiddleware',
+    # 'hotel.middleware.RestrictIPMiddleware',
 ]
 LOGIN_URL = 'login'
 ROOT_URLCONF = 'TheSiblingsHotel.urls'
