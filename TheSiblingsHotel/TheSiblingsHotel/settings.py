@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os 
+
+import environ
+env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-g-#cg_%wmrobxxji_vze9ihhvvq)i!_!a4kl-w6fj1&9-#i!k3'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1',]
 
 
 # Application definition
@@ -78,8 +82,13 @@ WSGI_APPLICATION = 'TheSiblingsHotel.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'verceldb',  # Replace with your actual database name
+        'USER': 'default',   # Replace with your actual database user
+        'PASSWORD': env('PASSWORD'),  # Replace with your actual database password
+        'HOST': env('HOST'),
+        'PORT': '5432',  # Assuming the default PostgreSQL port
+        'CONN_MAX_AGE': 600,  # (Optional) Set the connection timeout
     }
 }
 
