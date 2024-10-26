@@ -27,11 +27,11 @@ class LoginRequiredMiddleware:
         return response
     
     
-ALLOWED_IPS = [
-        '127.0.0.1',     # Allow localhost (for testing)
-        '192.168.1.100', # Replace with your allowed IPs
-        '203.0.113.50',  # Example of an external IP address
-    ]
+# ALLOWED_IPS = [
+#         '127.0.0.1',     # Allow localhost (for testing)
+#         '192.168.1.100', # Replace with your allowed IPs
+#         '203.0.113.50',  # Example of an external IP address
+#     ]
 
 
 class RestrictIPMiddleware:
