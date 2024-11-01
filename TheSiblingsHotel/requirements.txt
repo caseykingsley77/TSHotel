@@ -14,4 +14,4 @@ python-decouple==3.8
 setuptools==75.2.0
 sqlparse==0.5.1
 tzdata==2024.2
-virtualenv==20.26.6
+virtualenv
