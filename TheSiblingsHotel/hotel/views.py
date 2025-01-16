@@ -1,51 +1,17 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from .models import Room, Guest, Booking
-from datetime import timedelta
-from datetime import datetime  # <-- Add this line to import datetime
-from django.contrib.auth import logout
-from .models import *
-from django.http import JsonResponse
-from django.db.models import Sum
-from .forms import DateRangeForm
+from django.contrib.auth import logout, login as auth_login, logout as auth_logout, authenticate
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import HttpResponseNotAllowed
-from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from .forms import UserRegistrationForm
-from django.utils import timezone
-from django.db.models import F
-from django.utils import timezone
-from django.shortcuts import render
-from collections import defaultdict
-from .models import Booking
-from datetime import timedelta
-from django.utils import timezone
-from django.shortcuts import render
-from .models import Booking, Invoice
-from .forms import DateRangeForm
-from django.shortcuts import render, redirect
-from .forms import BookingForm
-from .models import Room, Guest, Booking
+from django.http import JsonResponse, HttpResponseNotAllowed
 from django.db import transaction
-from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import user_passes_test
-from .models import Room, RoomType, Guest, Service
-from .forms import RoomForm, RoomTypeForm, GuestForm, ServiceForm
-from django.db import transaction
-from django.shortcuts import render
-from django.db.models import Q
+from django.db.models import Sum, F, Q
 from collections import defaultdict, OrderedDict
-from datetime import datetime
-from .models import Booking
-from .forms import GuestForm, ServiceForm, RoomForm, RoomTypeForm
-from django.shortcuts import render, redirect
-from .models import Guest
-from .forms import GuestForm
+from datetime import datetime, timedelta
+
+from .models import Room, Guest, Booking, RoomType, Service, Invoice
+from .forms import DateRangeForm, UserRegistrationForm, BookingForm, GuestForm, ServiceForm, RoomForm, RoomTypeForm
 
 def privacy_policy(request):
     return render(request, 'hotel/privacy_policy.html')
