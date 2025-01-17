@@ -67,4 +67,3 @@ For questions or support, please contact:
 
 Name: Ezennia O. Kingsley
 Email: caseykingsley77@gmail.com
-GitHub: https://github.com/username
